@@ -27,13 +27,15 @@ function saveChat(obj) {
 }
 
 function readHistory() {
-    let store = db.transaction(["transcript"], "readonly").transaction.createObjectStore("transcript"),
+    let tx = db.transaction(["transcript"], "readonly"),
+        store = tx.objectStore('transcript'),
         req = store.openCursor(),
         transcript = [];
 
     req.onsuccess = function (event) {
         let cursor = event.target.result;
         if (cursor) {
+            console.log(cursor.value)
             transcript.push(cursor.value);
             cursor.continue();
         }
@@ -41,6 +43,18 @@ function readHistory() {
             return transcript;
         }
     }
+}
+
+// document.getElementById('click').addEventListener('click', event => {
+//     console.log(readHistory())
+//     readHistory()
+//     .then(res => console.log(res))
+// })
+document.getElementById('click').addEventListener('click', foo);
+
+async function foo() {
+    let hist = await readHistory()
+    console.log(hist)
 }
 
 // ************ Possible alternatives ************
